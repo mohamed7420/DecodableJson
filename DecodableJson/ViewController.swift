@@ -10,9 +10,45 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    let url = URL(string: "https://jsonplaceholder.typicode.com/posts")
+    
+    struct Posts:Decodable{
+        
+        var userId:Int
+        var title:String
+        var body:String
+        
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+    
+        
+        URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            
+            do{
+                
+            if let data = data {
+                
+                let decode = try JSONDecoder().decode([Posts].self, from: data)
+                
+                for i in decode{
+                    
+                    print(i.title)
+                }
+                
+            }
+                
+            }catch{
+                
+                print(error.localizedDescription)
+            }
+            
+        }.resume()
+        
+        
+        
     }
 
 
